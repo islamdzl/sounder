@@ -59,6 +59,7 @@
 
     <script>
     const webSocketUrl = "wss://sounder.onrender.com" // ws://192.168.178.90:2007   wss://sounder.onrender.com
+    const rand = String(Math.floor(Math.random()*1000000))
     let sourceBuffer;
     let mediaSource;
     const video = document.getElementById('video')
@@ -66,6 +67,9 @@
     const code_custom = document.getElementById('code-custom')
     const socket = new WebSocket(webSocketUrl)
     socket.onopen = ()=>{
+        socket.send(JSON.stringify({
+            set_key:rand
+        }))
         window.alert('connection on web socket Server!')
         mediaSource = new MediaSource();
         video.src = URL.createObjectURL(mediaSource);
@@ -76,7 +80,7 @@
     }
     socket.onmessage = (event)=>{
         console.log('message')
-        const videoblob = new Blob([JSON.parse(event.data).strem],{type:'/webm'})
+        const videoblob = new Blob([event.data],{type:'/webm'})
         const reader = new FileReader()
         reader.onload = ()=>{
             const arrayBuffer = reader.result;
@@ -85,9 +89,7 @@
         reader.readAsArrayBuffer(videoblob)
     }
     set_code.addEventListener('click',()=>{
-        socket.send(JSON.stringify({
-            set_key:code_custom.value
-        }))
+        
     })
 </script>
 </body>
