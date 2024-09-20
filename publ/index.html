@@ -72,8 +72,12 @@
         let set_code = document.getElementById('set-code')
         let MODE = false
         let mediaRecord
+        const rand = String(Math.floor(Math.random()*100000))
 
         socket.onopen = ()=>{
+                  socket.send(JSON.stringify({
+                    key:rand
+                  }))
             console.log('Connectiong On Web Socket Server!')
         }
         function GetUserMedia() {
@@ -83,17 +87,11 @@
                if (!MODE) {
                     return
                }
-                socket.send(JSON.stringify({
-                    send_to:{
-                        strem:evnt.data,
-                        key:KEY
-                    }
-                    
-                }))
+                socket.send(strem:evnt.data)
             }
         }
         set_code.addEventListener('click',()=>{
-            GetUserMedia()
+            
         })
         button.addEventListener('click', ()=>{
             GetUserMedia()
@@ -102,7 +100,6 @@
                 button.className = 'F'
                 mediaRecord.stop()
             }else{
-
             mediaRecord.start(100)
             MODE = true
                 button.className = 'T'
