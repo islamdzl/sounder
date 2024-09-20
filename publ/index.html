@@ -75,9 +75,7 @@
         const rand = String(Math.floor(Math.random()*100000))
 
         socket.onopen = ()=>{
-                  socket.send(JSON.stringify({
-                    key:rand
-                  }))
+                 
             console.log('Connectiong On Web Socket Server!')
         }
         function GetUserMedia() {
