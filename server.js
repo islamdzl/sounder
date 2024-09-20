@@ -7,7 +7,7 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 const map = new Map()
 let size = 0
-var clients = new Map()
+var clients = {}
 
 app.use(express.static('publ'));
 app.get('/',(req,res)=>{
@@ -26,17 +26,25 @@ wss.on('connection', (ws) => {
     ws.on('message', (message) => {
         console.log('client ',ws.id) 
         let data = JSON.parse(message.toString('utf-8')) 
+        try {
+          client[ws.id] = ws;
+        } catch (e) {
+          Object.values(clients).forEach((client)=>{
+            client.send(message)
+          })
+        }
         // console.log(data)
-
+        /*
         if (data.set_key) {//  <<< SET KEY
             SET_KEY(data)
         }else{
             if (data.send_to) {// <<< SED DATA
                 SED_STREM(data)
             }
-        }
+        }*/
 
     });
+    /*
     //----------------------------------------------------------
     const SED_STREM = (data)=>{
         clients.forEach((client)=>{
@@ -48,6 +56,7 @@ wss.on('connection', (ws) => {
         })
     }
     //----------------------------------------------------------
+    */
     const SET_KEY = async(data)=>{ 
         console.log(data.set_key)
         let edite_client = await clients.get(ws.id)
@@ -55,6 +64,7 @@ wss.on('connection', (ws) => {
         clients.set(ws.id, edite_client)
     }
     //----------------------------------------------------------
+    
 
     ws.on('close', () => {
         console.log('User disconnected');
