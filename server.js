@@ -10,69 +10,70 @@ let size = 0
 var clients = {}
 
 app.use(express.static('publ'));
-app.get('/',(req,res)=>{
-    res.sendFile(__dirname + '//publ//index.html')
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '//publ//index.html')
 })
-app.get('/islam',(req,res)=>{
-    res.sendFile(__dirname + '//publ//admin.html')
+app.get('/islam', (req, res) => {
+  res.sendFile(__dirname + '//publ//admin.html')
 })
 wss.on('connection', (ws) => {
-    if (!ws.id) {
-        size ++
-        ws.id = size
-        clients.set(size, ws)
+  if (!ws.id) {
+    size++
+    ws.id = size
+    clients.set(size, ws)
+  }
+  console.log('A user connected');
+  ws.on('message', (message) => {
+    console.log('client ', ws.id)
+    let data = JSON.parse(message.toString('utf-8'))
+    try {
+      client[ws.id] = ws;
+    } catch (e) {
+      Object.values(clients).forEach((client) => {
+        client.send(message)
+      })
     }
-    console.log('A user connected');
-    ws.on('message', (message) => {
-        console.log('client ',ws.id) 
-        let data = JSON.parse(message.toString('utf-8')) 
-        try {
-          client[ws.id] = ws;
-        } catch (e) {
-          Object.values(clients).forEach((client)=>{
-            client.send(message)
-          })
-        }
-        // console.log(data)
-        /*
-        if (data.set_key) {//  <<< SET KEY
-            SET_KEY(data)
-        }else{
-            if (data.send_to) {// <<< SED DATA
-                SED_STREM(data)
-            }
-        }*/
-
-    });
+    // console.log(data)
     /*
-    //----------------------------------------------------------
-    const SED_STREM = (data)=>{
-        clients.forEach((client)=>{
-            if (client.id === data.send_to.key) {
-                client.send(JSON.stringify({
-                    strem:data.send_to.strem
-                }))
-            }
-        })
-    }
-    //----------------------------------------------------------
-    */
-    const SET_KEY = async(data)=>{ 
-        console.log(data.set_key)
-        let edite_client = await clients.get(ws.id)
-        edite_client.id = data.set_key
-        clients.set(ws.id, edite_client)
-    }
-    //----------------------------------------------------------
-    
+    if (data.set_key) {//  <<< SET KEY
+        SET_KEY(data)
+    }else{
+        if (data.send_to) {// <<< SED DATA
+            SED_STREM(data)
+        }
+    }*/
 
-    ws.on('close', () => {
-        console.log('User disconnected');
-    });
+  });
+  /*
+  //----------------------------------------------------------
+  const SED_STREM = (data)=>{
+      clients.forEach((client)=>{
+          if (client.id === data.send_to.key) {
+              client.send(JSON.stringify({
+                  strem:data.send_to.strem
+              }))
+          }
+      })
+  }
+  //----------------------------------------------------------
+  */
+  const SET_KEY = async (data) => {
+    console.log(data.set_key)
+    let edite_client = await clients.get(ws.id)
+    edite_client.id = data.set_key
+    clients.set(ws.id, edite_client)
+  }
+  //----------------------------------------------------------
+
+
+  ws.on('close', () => {
+    delete clients[ws.id]
+    console.log('User disconnected');
+  });
 });
 
 server.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 
