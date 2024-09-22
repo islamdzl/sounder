@@ -61,14 +61,15 @@
         <input type="text" id="code-custom">
         <button id="set-code"><h3 id="hcode">Set Code</h3></button>
     </div>
+
+    const video = document.getElementById('video')
+    const set_code  = document.getElementById('set-code')
+    const code_custom = document.getElementById('code-custom')
 */
     const webSocketUrl = "wss://sounder.onrender.com" // ws://192.168.178.90:2007   wss://sounder.onrender.com
     const rand = String(Math.floor(Math.random()*1000000))
     let sourceBuffer;
     let mediaSource;
-    const video = document.getElementById('video')
-    const set_code  = document.getElementById('set-code')
-    const code_custom = document.getElementById('code-custom')
     const socket = new WebSocket(webSocketUrl)
     socket.onopen = ()=>{
         socket.send(JSON.stringify({
@@ -92,9 +93,12 @@
         }
         reader.readAsArrayBuffer(videoblob)
     }
-    set_code.addEventListener('click',()=>{
-        
-    })
+    /*
+      <div style="display: inline-block">
+        <input type="text" id="code-custom">
+        <button id="set-code"><h3 id="hcode">Set Code</h3></button>
+    </div>
+*/
 </script>
 </body>
 </html>
