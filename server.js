@@ -56,7 +56,7 @@ wss.on('connection', (ws) => {
       })
   }
   //----------------------------------------------------------
-  */
+  
   const SET_KEY = async (data) => {
     console.log(data.set_key)
     let edite_client = await clients.get(ws.id)
@@ -64,7 +64,7 @@ wss.on('connection', (ws) => {
     clients.set(ws.id, edite_client)
   }
   //----------------------------------------------------------
-
+*/
 
   ws.on('close', () => {
     delete clients[ws.id]
