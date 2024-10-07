@@ -9,8 +9,8 @@ const map = new Map()
 let size = 0
 var clients = {}
 
-app.use(express.static('publ'));
 app.use(express.static('./'));
+app.use(express.static('publ'));
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '//publ//index.html')
 })
