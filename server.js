@@ -9,7 +9,7 @@ const map = new Map()
 let size = 0
 var clients = {}
 
-app.use(express.static('./'));  // tiktokmBDprEsiMnTLJwlldigjH32OdO8ql6QW.txt
+app.use(express.static('./publ'));  // tiktokmBDprEsiMnTLJwlldigjH32OdO8ql6QW.txt
 // app.use(express.static('publ'));
 
 app.get('/', (req, res) => {
